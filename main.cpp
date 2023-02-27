@@ -89,6 +89,9 @@ int main(int, char**)
                     if (ImGui::MenuItem("Open..", "Ctrl+O")) {
 
                     }
+                    if (ImGui::MenuItem("Demo")) {
+                        show_demo_window = true;
+                    }
                     if (ImGui::MenuItem("Close", "Ctrl+w")) {
 
                     }
@@ -103,6 +106,25 @@ int main(int, char**)
             ImGui::RadioButton("Debug", &e, 0);
             ImGui::SameLine();
             ImGui::RadioButton("Release", &e, 1);
+            
+            ImGui::Text("Test Cases");
+            static bool selected[12];
+            if (ImGui::BeginTable("Test Cases", 3)) {
+                int count = 0;
+                for (int row = 0; row < 4; row++)
+                {
+                    ImGui::TableNextRow();
+                    for (int column = 0; column < 3; column++)
+                    {
+                        ImGui::TableSetColumnIndex(column);
+                        char name[100];
+                        sprintf(name, "Test Case %d", count);
+                        ImGui::Checkbox(name, &selected[count]);
+                        ++count;
+                    }
+                }
+                ImGui::EndTable();
+            }
 
             if (ImGui::Button("Run")) {
                 printf("Run\n");
