@@ -126,9 +126,23 @@ int main(int, char**)
                 ImGui::EndTable();
             }
 
+            if (ImGui::Button("Select All")) {
+
+            }
+            ImGui::SameLine();
+
+            if (ImGui::Button("Select None")) {
+
+            }
+
+            ImGui::SameLine();
             if (ImGui::Button("Run")) {
                 printf("Run\n");
             }
+
+            ImGui::Text("Test Status");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Not started");
             
             ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
             if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
