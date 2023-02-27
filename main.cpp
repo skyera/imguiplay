@@ -127,12 +127,15 @@ int main(int, char**)
             }
 
             if (ImGui::Button("Select All")) {
+                for (int i = 0; i < 12; ++i)
+                    selected[i] = true;
 
             }
             ImGui::SameLine();
 
             if (ImGui::Button("Select None")) {
-
+                for (int i = 0; i < 12; ++i)
+                    selected[i] = false;
             }
 
             ImGui::SameLine();
