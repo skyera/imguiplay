@@ -3,6 +3,7 @@
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
+#include <math.h>           // sqrtf, powf, cosf, sinf, floorf, ceilf
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
@@ -152,7 +153,39 @@ int main(int, char**)
             {
                 if (ImGui::BeginTabItem("Memory Plot"))
                 {
-                    ImGui::Text("This is the Avocado tab!\nblah blah blah blah blah");
+                    static bool animate = true;
+                    ImGui::Checkbox("Animate", &animate);
+
+                    static float arr[] = { 0.6f, 0.1f, 1.0f, 0.5f, 0.92f, 0.1f, 0.2f };
+                    ImGui::PlotLines("Frame Times", arr, IM_ARRAYSIZE(arr));
+                    ImGui::PlotHistogram("Histogram", arr, IM_ARRAYSIZE(arr),
+                            0, NULL, 0.0f, 1.0f, ImVec2(0, 80.0f));
+
+                    static float values[90] = {};
+                    static int values_offset = 0;
+                    static double refresh_time = 0.0;
+
+                    if (!animate || refresh_time == 0.0)
+                        refresh_time = ImGui::GetTime();
+
+                    while (refresh_time < ImGui::GetTime()) {
+                        static float phase = 0.0f;
+                        values[values_offset] = cosf(phase);
+                        values_offset = (values_offset + 1) % IM_ARRAYSIZE(values);
+                        phase += 0.10f * values_offset;
+                        refresh_time += 1.0f / 60.0f;
+                    }
+
+                    {
+                        float average = 0.0f;
+                        for (int n = 0; n < IM_ARRAYSIZE(values); n++)
+                            average += values[n];
+                        average /= (float)IM_ARRAYSIZE(values);
+                        char overlay[32];
+                        sprintf(overlay, "avg %f", average);
+                        ImGui::PlotLines("Lines", values, IM_ARRAYSIZE(values),
+                                values_offset, overlay, -1.0f, 1.0f, ImVec2(0, 80.0f));
+                    }
                     ImGui::EndTabItem();
                 }
                 if (ImGui::BeginTabItem("Test Summary"))
