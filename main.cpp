@@ -17,6 +17,16 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+void setup_fonts()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    
+    io.Fonts->Clear();
+    io.Fonts->AddFontDefault();
+    ImFont *font = io.Fonts->Fonts.back();
+    font->Scale = 1.5f;
+}
+
 int main(int, char**)
 {
     glfwSetErrorCallback(glfw_error_callback);
@@ -27,7 +37,7 @@ int main(int, char**)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    GLFWwindow* window = glfwCreateWindow(800, 720,
+    GLFWwindow* window = glfwCreateWindow(1024, 720,
             "Test Dear ImGui", NULL, NULL);
     if (window == NULL)
         return 1;
@@ -43,7 +53,8 @@ int main(int, char**)
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
-
+    
+    setup_fonts();
     bool show_demo_window = false;
     bool show_another_window = false;
     bool show_test_window = true;
