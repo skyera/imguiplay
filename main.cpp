@@ -3,7 +3,7 @@
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
-#include <math.h>           // sqrtf, powf, cosf, sinf, floorf, ceilf
+#include <math.h>
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
 // To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
@@ -190,17 +190,17 @@ int main(int, char**)
                 }
                 if (ImGui::BeginTabItem("Test Summary"))
                 {
-                    ImGui::Text("This is the Broccoli tab!\nblah blah blah blah blah");
+                    ImGui::Text("This is the Broccoli tab!");
                     ImGui::EndTabItem();
                 }
                 if (ImGui::BeginTabItem("Test XML"))
                 {
-                    ImGui::Text("This is the Cucumber tab!\nblah blah blah blah blah");
+                    ImGui::Text("This is the Cucumber tab!");
                     ImGui::EndTabItem();
                 }
                 if (ImGui::BeginTabItem("Valgrind"))
                 {
-                    ImGui::Text("This is the Cucumber tab!\nblah blah blah blah blah");
+                    ImGui::Text("This is the Cucumber tab!");
                     ImGui::EndTabItem();
                 }
                 ImGui::EndTabBar();
