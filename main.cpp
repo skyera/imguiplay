@@ -28,7 +28,7 @@ int main(int, char**)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     GLFWwindow* window = glfwCreateWindow(800, 720,
-            "Dear ImGui GLFW+OpenGL3 in Action", NULL, NULL);
+            "Test Dear ImGui", NULL, NULL);
     if (window == NULL)
         return 1;
 
