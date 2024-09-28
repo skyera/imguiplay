@@ -21,3 +21,4 @@ git push
 * git push
 ```
 
+git submodule update --init --recursive
