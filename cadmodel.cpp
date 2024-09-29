@@ -68,8 +68,27 @@ void Cadmodel::read(const std::string& text)
     if (lines.size() < 2) {
         throw CadmodelError("Not enough lines in text");
     }
-    auto line1_tokens = tokenize(lines[0]);
+
+    validate_1line(lines[0]);
+    validate_lastline(lines[lines.size() - 1]);
+
+}
+
+void Cadmodel::validate_1line(const std::string& line)
+{
+    auto line1_tokens = tokenize(line);
     if (line1_tokens.size() < 2) {
         throw CadmodelError("Not enough tokens in line 1");
+    }
+    if (line1_tokens[0] != "solid") {
+        throw CadmodelError("Invalid first token in line 1");
+    }
+}
+    
+void Cadmodel::validate_lastline(const std::string& line)
+{
+    auto last_line_tokens = tokenize(line);
+    if (last_line_tokens[0] != "endsolid") {
+        throw CadmodelError("Invalid last line");
     }
 }

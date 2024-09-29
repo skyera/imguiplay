@@ -72,4 +72,13 @@ TEST_CASE("read") {
         std::string text = "line1\nline2";
         REQUIRE_THROWS_AS(model.read(text), CadmodelError);
     }
+    SUBCASE("invalid_lastline") {
+        std::string text = "solid rect\nline3";
+        REQUIRE_THROWS_AS(model.read(text), CadmodelError);
+    }
+
+    SUBCASE("valid_1_and_last_lines") {
+        std::string text = "solid rect\nendsolid rect";
+        model.read(text);
+    }
 }

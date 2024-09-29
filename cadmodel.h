@@ -28,6 +28,7 @@ public:
     void open(const std::string& filename);
     void read(const std::string& text);
 private:
-    
+    void validate_1line(const std::string& line); 
+    void validate_lastline(const std::string& line);
 };
 #endif
