@@ -1,6 +1,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "ImGuiFileDialog.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
@@ -95,6 +96,7 @@ int main(int, char**)
         }
 
         {
+            static std::string path;
             ImGui::Begin("Test in Action", &show_test_window, ImGuiWindowFlags_MenuBar);                          
             if (ImGui::BeginMenuBar()) {
                 if (ImGui::BeginMenu("File")) {
@@ -111,6 +113,21 @@ int main(int, char**)
                 }
                 ImGui::EndMenuBar();
             }
+            
+            if (ImGui::Button("Open")) {
+                IGFD::FileDialogConfig config;
+                config.path = ".";
+                IGFD::FileDialog::Instance()->OpenDialog("ChooseFileDlgKey",
+                        "Choose File", "((.*))", config);
+            }
+
+            if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+                if (ImGuiFileDialog::Instance()->IsOk()) {
+                    path = ImGuiFileDialog::Instance()->GetFilePathName();
+                }
+                ImGuiFileDialog::Instance()->Close();
+            }
+            ImGui::Text("Path: %s", path.c_str());
 
             ImGui::Text("Build Type: ");
             ImGui::SameLine();
@@ -143,6 +160,8 @@ int main(int, char**)
                     selected[i] = true;
 
             }
+            
+
             ImGui::SameLine();
 
             if (ImGui::Button("Select None")) {
