@@ -228,7 +228,7 @@ int main(int, char**)
             ImGui::Text("Hello Xiaohei!");
             if (ImGui::Button("Open")) {
                 IGFD::FileDialogConfig config;
-                config.path = ".";
+                config.path = "./data";
                 IGFD::FileDialog::Instance()->OpenDialog("ChooseFileDlgKey",
                         "Choose File", "((.*)),.stl", config);
             }
@@ -239,6 +239,7 @@ int main(int, char**)
                 }
                 ImGuiFileDialog::Instance()->Close();
             }
+            ImGui::SameLine();
             ImGui::Text("Path: %s", path.c_str());
             ImGui::End();
         }

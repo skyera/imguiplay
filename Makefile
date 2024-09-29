@@ -21,11 +21,17 @@ SOURCES = main.cpp
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp 
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_glfw.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 SOURCES += $(IMGUIFILEDIALOG_DIR)/ImGuiFileDialog.cpp
+SOURCES += cadmodel.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 LINUX_GL_LIBS = -lGL
 
+TEST_SOURCES = test.cpp cadmodel.cpp
+TEST_OBJECTS = $(addsuffix .o, $(basename $(notdir $(TEST_SOURCES))))
+TEST_TARGET = testimgui
+
 CXXFLAGS = -std=c++11 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends -I$(IMGUIFILEDIALOG_DIR)
+CXXFLAGS += -Iexternal/doctest/doctest
 CXXFLAGS += -g -Wall -Wformat
 LIBS =
 
@@ -88,6 +94,12 @@ all: $(EXE)
 	@echo Build complete for $(ECHO_MESSAGE)
 
 $(EXE): $(OBJS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
+
+test: $(TEST_TARGET)
+	./$(TEST_TARGET)
+
+$(TEST_TARGET): $(TEST_OBJECTS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 clean:
