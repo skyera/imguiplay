@@ -57,7 +57,6 @@ int main(int, char**)
     
     setup_fonts();
     bool show_demo_window = false;
-    bool show_another_window = false;
     bool show_test_window = true;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -79,7 +78,6 @@ int main(int, char**)
 
             ImGui::Text("This is some useful text.");              
             ImGui::Checkbox("Demo Window", &show_demo_window);    
-            ImGui::Checkbox("Another Window", &show_another_window);
 
             ImGui::SliderFloat("float", &f, 0.0f, 1.0f);         
             ImGui::ColorEdit3("clear color", (float*)&clear_color); 
@@ -96,7 +94,6 @@ int main(int, char**)
         }
 
         {
-            static std::string path;
             ImGui::Begin("Test in Action", &show_test_window, ImGuiWindowFlags_MenuBar);                          
             if (ImGui::BeginMenuBar()) {
                 if (ImGui::BeginMenu("File")) {
@@ -114,20 +111,6 @@ int main(int, char**)
                 ImGui::EndMenuBar();
             }
             
-            if (ImGui::Button("Open")) {
-                IGFD::FileDialogConfig config;
-                config.path = ".";
-                IGFD::FileDialog::Instance()->OpenDialog("ChooseFileDlgKey",
-                        "Choose File", "((.*))", config);
-            }
-
-            if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
-                if (ImGuiFileDialog::Instance()->IsOk()) {
-                    path = ImGuiFileDialog::Instance()->GetFilePathName();
-                }
-                ImGuiFileDialog::Instance()->Close();
-            }
-            ImGui::Text("Path: %s", path.c_str());
 
             ImGui::Text("Build Type: ");
             ImGui::SameLine();
@@ -239,12 +222,24 @@ int main(int, char**)
             ImGui::End();
         }
 
-        if (show_another_window)
         {
-            ImGui::Begin("Another Window", &show_another_window);   
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                show_another_window = false;
+            static std::string path;
+            ImGui::Begin("Imgui BlackCat");
+            ImGui::Text("Hello Xiaohei!");
+            if (ImGui::Button("Open")) {
+                IGFD::FileDialogConfig config;
+                config.path = ".";
+                IGFD::FileDialog::Instance()->OpenDialog("ChooseFileDlgKey",
+                        "Choose File", "((.*)),.stl", config);
+            }
+
+            if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+                if (ImGuiFileDialog::Instance()->IsOk()) {
+                    path = ImGuiFileDialog::Instance()->GetFilePathName();
+                }
+                ImGuiFileDialog::Instance()->Close();
+            }
+            ImGui::Text("Path: %s", path.c_str());
             ImGui::End();
         }
 
