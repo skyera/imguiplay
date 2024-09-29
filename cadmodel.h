@@ -7,6 +7,7 @@
 
 std::string read_file(const std::string& filename);
 std::vector<std::string> split(const std::string& text);
+std::vector<std::string> tokensize(const std::string& str);
 
 class CadmodelError: std::exception
 {
@@ -25,6 +26,7 @@ public:
     ~Cadmodel();
 
     void open(const std::string& filename);
+    void read(const std::string& text);
 private:
     
 };

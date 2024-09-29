@@ -28,6 +28,17 @@ std::vector<std::string> split(const std::string& text)
     return lines;
 }
 
+std::vector<std::string> tokensize(const std::string& str) {
+    std::istringstream iss(str);
+    std::string token;
+    std::vector<std::string> tokens;
+
+    while (iss >> token) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
 Cadmodel::Cadmodel()
 {
 
@@ -42,5 +53,19 @@ void Cadmodel::open(const std::string& filename)
     std::ifstream ifs(filename.c_str());
     if(!ifs.is_open()) {
         throw CadmodelError("Cannot open file: " + filename);
+    }
+
+    auto text = read_file(filename);
+    auto lines = split(text);
+    if (lines.size() < 2) {
+        throw CadmodelError("Not enough lines in file: " + filename);
+    }
+}
+    
+void Cadmodel::read(const std::string& text)
+{
+    auto lines = split(text);
+    if (lines.size() < 2) {
+        throw CadmodelError("Not enough lines in text");
     }
 }
