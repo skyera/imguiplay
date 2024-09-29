@@ -12,6 +12,16 @@ TEST_CASE("open_non_existing_file") {
     REQUIRE_THROWS_AS(model.open(filename), CadmodelError);
 }
 
+TEST_CASE("split_text") {
+    SUBCASE("2_line") {
+        std::string str = "solid\nend";
+        auto lines = split(str);
+        REQUIRE(lines.size() == 2);
+        REQUIRE(lines[0] == "solid");
+        REQUIRE(lines[1] == "end");
+    }
+}
+
 TEST_CASE("tokenize") {
     SUBCASE("empty_str") {
         std::string str = "";
@@ -39,6 +49,16 @@ TEST_CASE("tokenize") {
         REQUIRE(tokens[1] == "2");
         REQUIRE(tokens[2] == "3");
     }
+    SUBCASE("solid_end") {
+        std::string str = "solid\nend";
+        auto lines = split(str);
+        REQUIRE(lines.size() == 2);
+        REQUIRE(lines[0] == "solid");
+        REQUIRE(lines[1] == "end");
+        auto tokens = tokenize(lines[0]);
+        REQUIRE(tokens.size() == 1);
+        REQUIRE(tokens[0] == "solid");
+    }
 }
 
 TEST_CASE("read") {
@@ -48,7 +68,7 @@ TEST_CASE("read") {
         std::string text = "";
         REQUIRE_THROWS_AS(model.read(text), CadmodelError);
     }
-    SUBCASE("2line_emptyline") {
+    SUBCASE("invalid_firstline") {
         std::string text = "line1\nline2";
         REQUIRE_THROWS_AS(model.read(text), CadmodelError);
     }

@@ -68,4 +68,8 @@ void Cadmodel::read(const std::string& text)
     if (lines.size() < 2) {
         throw CadmodelError("Not enough lines in text");
     }
+    auto line1_tokens = tokenize(lines[0]);
+    if (line1_tokens.size() < 2) {
+        throw CadmodelError("Not enough tokens in line 1");
+    }
 }

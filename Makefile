@@ -35,6 +35,10 @@ CXXFLAGS += -Iexternal/doctest/doctest
 CXXFLAGS += -g -Wall -Wformat
 LIBS =
 
+ifeq ($DEBUG, 1)
+	CXXFLAGS += -g
+endif
+
 ##---------------------------------------------------------------------
 ## OPENGL ES
 ##---------------------------------------------------------------------
@@ -103,4 +107,4 @@ $(TEST_TARGET): $(TEST_OBJECTS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 clean:
-	rm -f $(EXE) $(OBJS)
+	rm -f $(EXE) $(OBJS) $(TEST_TARGET) $(TEST_OBJECTS)
