@@ -28,7 +28,7 @@ std::vector<std::string> split(const std::string& text)
     return lines;
 }
 
-std::vector<std::string> tokensize(const std::string& str) {
+std::vector<std::string> tokenize(const std::string& str) {
     std::istringstream iss(str);
     std::string token;
     std::vector<std::string> tokens;

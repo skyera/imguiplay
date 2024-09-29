@@ -12,20 +12,20 @@ TEST_CASE("open_non_existing_file") {
     REQUIRE_THROWS_AS(model.open(filename), CadmodelError);
 }
 
-TEST_CASE("tokensize") {
+TEST_CASE("tokenize") {
     SUBCASE("empty_str") {
         std::string str = "";
-        auto tokens = tokensize(str);
+        auto tokens = tokenize(str);
         REQUIRE(tokens.size() == 0);
     }
     SUBCASE("empty_spaces") {
         std::string str = "  ";
-        auto tokens = tokensize(str);
+        auto tokens = tokenize(str);
         REQUIRE(tokens.size() == 0);
     }
     SUBCASE("str_with_spaces") {
         std::string str = "1 2 3";
-        auto tokens = tokensize(str);
+        auto tokens = tokenize(str);
         REQUIRE(tokens.size() == 3);
         REQUIRE(tokens[0] == "1");
         REQUIRE(tokens[1] == "2");
@@ -33,7 +33,7 @@ TEST_CASE("tokensize") {
     }
     SUBCASE("normal2") {
         std::string str = " 1   2    3 ";    
-        auto tokens = tokensize(str);
+        auto tokens = tokenize(str);
         REQUIRE(tokens.size() == 3);
         REQUIRE(tokens[0] == "1");
         REQUIRE(tokens[1] == "2");
