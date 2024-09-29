@@ -4,3 +4,6 @@
 [submodule "external/ImGuiFileDialog"]
 	path = external/ImGuiFileDialog
 	url = https://github.com/aiekick/ImGuiFileDialog
+[submodule "external/doctest"]
+	path = external/doctest
+	url = https://github.com/doctest/doctest
