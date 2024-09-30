@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <assert.h>
 
 std::string read_file(const std::string& filename) {
     std::ifstream ifs(filename.c_str());
@@ -56,10 +57,7 @@ void Cadmodel::open(const std::string& filename)
     }
 
     auto text = read_file(filename);
-    auto lines = split(text);
-    if (lines.size() < 2) {
-        throw CadmodelError("Not enough lines in file: " + filename);
-    }
+    read(text);
 }
     
 void Cadmodel::read(const std::string& text)
@@ -73,7 +71,7 @@ void Cadmodel::read(const std::string& text)
     validate_lastline(lines_[lines_.size() - 1]);
 
     read_facets();
-
+    read_endsolid();
 }
 
 void Cadmodel::validate_1line(const std::string& line)
@@ -97,8 +95,11 @@ void Cadmodel::validate_lastline(const std::string& line)
     
 void Cadmodel::read_facets()
 {
-    index_ = 2;
-    while (index_ < lines_.size() - 1) {
+    index_ = 1;
+    while (index_ < lines_.size()) {
+        if (index_ == lines_.size() - 1) {
+            break;
+        }
         auto facet = read_facet();
         facets_.push_back(facet);
     }
@@ -109,7 +110,15 @@ Facet Cadmodel::read_facet()
     Facet facet;
 
     facet.normal() = read_facet_normal();
-
+    read_outer_loop();
+    auto p1 = read_vertex();
+    auto p2 = read_vertex();
+    auto p3 = read_vertex();
+    facet.points().push_back(p1);
+    facet.points().push_back(p2);
+    facet.points().push_back(p3);
+    read_endloop();
+    read_endfacet();
     return facet;
 }
 
@@ -143,4 +152,61 @@ std::vector<std::string> Cadmodel::get_line_tokens()
     auto line_tokens = tokenize(lines_[index_]);
     index_++;
     return line_tokens;
+}
+    
+void Cadmodel::read_outer_loop()
+{
+    std::vector<std::string> tokens = get_line_tokens();
+    if (tokens.size() != 2) {
+        throw CadmodelError("Invalid outer loop");
+    }
+    if (tokens[0] != "outer" && tokens[1] != "loop") {
+        throw CadmodelError("Invalid outer loop");
+    }
+}
+
+Point Cadmodel::read_vertex()
+{
+    std::vector<std::string> tokens = get_line_tokens();
+    if (tokens.size() != 4) {
+        throw CadmodelError("Invalid vertex");
+    }
+    double x = std::stod(tokens[1]);
+    double y = std::stod(tokens[2]);
+    double z = std::stod(tokens[3]);
+    Point vertex(x, y, z);
+    return vertex;
+}
+    
+void Cadmodel::read_endloop()
+{
+    auto tokens = get_line_tokens();
+    if (tokens.size() != 1) {
+        throw CadmodelError("Invalid endloop");
+    }
+    if (tokens[0] != "endloop") {
+        throw CadmodelError("Invalid endloop");
+    }
+}
+    
+void Cadmodel::read_endfacet()
+{
+    auto tokens = get_line_tokens();
+    if (tokens.size() != 1) {
+        throw CadmodelError("Invalid endfacet");
+    }
+    if (tokens[0] != "endfacet") {
+        throw CadmodelError("Invalid endfacet");
+    }
+}
+
+void Cadmodel::read_endsolid()
+{
+    auto tokens = get_line_tokens();
+    if (tokens.size() != 2) {
+        throw CadmodelError("Invalid endsolid");
+    }
+    if (tokens[0] != "endsolid") {
+        throw CadmodelError("Invalid endsolid");
+    }
 }

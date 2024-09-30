@@ -28,7 +28,8 @@ public:
 
     const Point& normal() const { return normal_; }
     Point& normal() { return normal_; }
-    std::vector<Point> points() { return points_; }
+    const std::vector<Point>& points() const { return points_; }
+    std::vector<Point>& points() { return points_; }
 private:
     Point normal_;
     std::vector<Point> points_;
@@ -52,12 +53,18 @@ public:
 
     void open(const std::string& filename);
     void read(const std::string& text);
+    const std::vector<Facet>& facets() const { return facets_; }
 private:
     void validate_1line(const std::string& line); 
     void validate_lastline(const std::string& line);
     void read_facets();
     Facet read_facet();
     Point read_facet_normal();
+    void read_outer_loop();
+    Point read_vertex();
+    void read_endloop();
+    void read_endfacet();
+    void read_endsolid();
     std::vector<std::string> get_line_tokens();
 
     

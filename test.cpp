@@ -13,6 +13,11 @@ TEST_CASE("open_non_existing_file") {
 }
 
 TEST_CASE("split_text") {
+    SUBCASE("empty_str") {
+        std::string str = "";
+        auto lines = split(str);
+        REQUIRE(lines.size() == 0);
+    }
     SUBCASE("2_line") {
         std::string str = "solid\nend";
         auto lines = split(str);
@@ -61,7 +66,7 @@ TEST_CASE("tokenize") {
     }
 }
 
-TEST_CASE("read") {
+TEST_CASE("check_1_and_last_lines") {
     Cadmodel model;
 
     SUBCASE("empty line") {
@@ -79,6 +84,23 @@ TEST_CASE("read") {
 
     SUBCASE("valid_1_and_last_lines") {
         std::string text = "solid rect\nendsolid rect";
+        model.read(text);
+    }
+}
+
+TEST_CASE("facet") {
+    Cadmodel model;
+
+    SUBCASE("normal") {
+        std::string text = "solid rect\n"
+            "facet normal 0 0 1\n"
+            "outer loop\n"
+            "vertex 0 0 0\n"
+            "vertex 1 0 0\n"
+            "vertex 1 1 0\n"
+            "endloop\n"
+            "endfacet\n"
+            "endsolid rect";
         model.read(text);
     }
 }
