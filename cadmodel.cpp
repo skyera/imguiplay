@@ -64,13 +64,15 @@ void Cadmodel::open(const std::string& filename)
     
 void Cadmodel::read(const std::string& text)
 {
-    auto lines = split(text);
-    if (lines.size() < 2) {
+    lines_ = split(text);
+    if (lines_.size() < 2) {
         throw CadmodelError("Not enough lines in text");
     }
 
-    validate_1line(lines[0]);
-    validate_lastline(lines[lines.size() - 1]);
+    validate_1line(lines_[0]);
+    validate_lastline(lines_[lines_.size() - 1]);
+
+    read_facets();
 
 }
 
@@ -91,4 +93,54 @@ void Cadmodel::validate_lastline(const std::string& line)
     if (last_line_tokens[0] != "endsolid") {
         throw CadmodelError("Invalid last line");
     }
+}
+    
+void Cadmodel::read_facets()
+{
+    index_ = 2;
+    while (index_ < lines_.size() - 1) {
+        auto facet = read_facet();
+        facets_.push_back(facet);
+    }
+}
+
+Facet Cadmodel::read_facet()
+{
+    Facet facet;
+
+    facet.normal() = read_facet_normal();
+
+    return facet;
+}
+
+Point Cadmodel::read_facet_normal()
+{
+    auto tokens = get_line_tokens();
+    if(tokens.size() != 5) {
+        throw CadmodelError("Invalid facet normal");
+    }
+    
+    if (tokens[0] != "facet") {
+        throw CadmodelError("Invalid facet normal");
+    }
+
+    if (tokens[1] != "normal") {
+        throw CadmodelError("Invalid facet normal");
+    }
+
+    double x = std::stod(tokens[2]);
+    double y = std::stod(tokens[3]);
+    double z = std::stod(tokens[4]);
+    Point normal(x, y, z);
+    return normal;
+}
+
+std::vector<std::string> Cadmodel::get_line_tokens()
+{
+    if (index_ >= lines_.size()) {
+        throw CadmodelError("End of file");
+    }
+    auto line_tokens = tokenize(lines_[index_]);
+    index_++;
+    return line_tokens;
 }
