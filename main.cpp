@@ -30,6 +30,24 @@ void setup_fonts()
     font->Scale = 1.5f;
 }
 
+void show_error_dialog(const char* errorMessage) {
+    ImGui::OpenPopup("Error");
+
+    // Center the popup window
+    ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(),
+            ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("Error", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("%s", errorMessage);
+
+        if (ImGui::Button("OK", ImVec2(120, 0))) {
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::SetItemDefaultFocus(); 
+        ImGui::EndPopup();
+    }
+}
+
 int main(int, char**)
 {
     glfwSetErrorCallback(glfw_error_callback);
@@ -234,6 +252,9 @@ int main(int, char**)
 
         {
             static std::string path;
+            static int num_facets = 0;
+            static std::string error;
+            static bool show_error = false;
             ImGui::Begin("Imgui BlackCat");
             ImGui::Text("Hello Xiaohei!");
             if (ImGui::Button("Open")) {
@@ -245,15 +266,30 @@ int main(int, char**)
 
             if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
                 if (ImGuiFileDialog::Instance()->IsOk()) {
+                    show_error = false;
                     path = ImGuiFileDialog::Instance()->GetFilePathName();
                     Cadmodel model;
-                    model.open(path);
-                    std::cout << "# facets: " << model.facets().size() << std::endl;
+
+                    try {
+                        model.open(path);
+                        num_facets = model.facets().size();
+                    } catch (const CadmodelError& e) {
+                        printf("Error: %s\n", e.what());
+                        //show_error_dialog(e.what());
+                        show_error = true;
+                        error = e.what();
+                    }
                 }
                 ImGuiFileDialog::Instance()->Close();
             }
             ImGui::SameLine();
             ImGui::Text("Path: %s", path.c_str());
+            ImGui::Text("# facets: %d", num_facets);
+            
+            if (show_error) {
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", error.c_str());
+            }
+
             ImGui::End();
         }
 
