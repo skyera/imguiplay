@@ -48,6 +48,8 @@ void show_error_dialog(const char* errorMessage) {
     }
 }
 
+static bool show_about = false;
+
 static void show_main_menu_bar() {
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
@@ -56,15 +58,59 @@ static void show_main_menu_bar() {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Help")) {
-            if (ImGui::MenuItem("About")) {
-                ImGui::OpenPopup("About");
-                ImGui::ShowAboutWindow();
+            if (ImGui::Button("About")) {
+                show_about = true;
             }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
     }
 }
+
+// Function to display the modal dialog
+void ShowCustomAboutModalDialog() {
+    static bool open = true;
+    if (show_about) {
+        ImGui::OpenPopup("About Myapp");
+        open = true;
+    }
+
+    if (ImGui::BeginPopupModal("About Myapp", &open, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("My Application");
+        ImGui::Separator();
+
+        ImGui::Text("Version: 1.0.0");
+        ImGui::Text("Author: Your Name");
+
+        ImGui::Spacing();
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Text("License");
+        ImGui::Text("This application is licensed under the MIT License.");
+
+        ImGui::Spacing();
+        if (ImGui::Button("Visit GitHub")) {
+#ifdef _WIN32
+            system("start https://github.com/your-repository");
+#elif __APPLE__
+            system("open https://github.com/your-repository");
+#else
+            system("xdg-open https://github.com/skyera/imguiplay");
+#endif
+        }
+
+        // Close button
+        ImGui::Spacing();
+        if (ImGui::Button("Close")) {
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
+    }
+}
+
+static bool open_about = false;
 
 int main(int, char**)
 {
@@ -115,9 +161,10 @@ int main(int, char**)
 
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
-        
-    
+       
+        show_about = false;
         show_main_menu_bar();
+        ShowCustomAboutModalDialog();
         {
             static float f = 0.0f;
             static int counter = 0;
@@ -138,6 +185,9 @@ int main(int, char**)
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
                         1000.0f / ImGui::GetIO().Framerate,
                         ImGui::GetIO().Framerate);
+            /* if (ImGui::Button("About")) { */
+            /*     ImGui::OpenPopup("About Myapp"); */
+            /* } */
             ImGui::End();
         }
 
