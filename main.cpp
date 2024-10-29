@@ -74,12 +74,13 @@ static void show_about_dialog() {
         open = true;
     }
 
-    if (ImGui::BeginPopupModal("About Myapp", &open, ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("My Application");
+    if (ImGui::BeginPopupModal("About Myapp", &open,
+                ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("imguiplay");
         ImGui::Separator();
 
         ImGui::Text("Version: 1.0.0");
-        ImGui::Text("Author: Your Name");
+        ImGui::Text("Author: skyera");
 
         ImGui::Spacing();
 
@@ -91,9 +92,9 @@ static void show_about_dialog() {
         ImGui::Spacing();
         if (ImGui::Button("Visit GitHub")) {
 #ifdef _WIN32
-            system("start https://github.com/your-repository");
+            system("start https://github.com/skeyera/imguiplay");
 #elif __APPLE__
-            system("open https://github.com/your-repository");
+            system("open https://github.com/skyera/imguiplay");
 #else
             system("xdg-open https://github.com/skyera/imguiplay");
 #endif
@@ -131,6 +132,27 @@ static void render_window1() {
     ImGui::End();
 }
 
+static bool selected[12];
+void render_test_case_table() {
+    ImGui::Text("Test Cases");
+    if (ImGui::BeginTable("Test Cases", 3)) {
+        int count = 0;
+        for (int row = 0; row < 4; row++)
+        {
+            ImGui::TableNextRow();
+            for (int column = 0; column < 3; column++)
+            {
+                ImGui::TableSetColumnIndex(column);
+                char name[100];
+                sprintf(name, "Test Case %d", count);
+                ImGui::Checkbox(name, &selected[count]);
+                ++count;
+            }
+        }
+        ImGui::EndTable();
+    }
+}
+
 static void render_test_window() {
     ImGui::Begin("Test in Action", &show_test_window, ImGuiWindowFlags_MenuBar);                          
     if (ImGui::BeginMenuBar()) {
@@ -156,25 +178,8 @@ static void render_test_window() {
     ImGui::RadioButton("Debug", &e, 0);
     ImGui::SameLine();
     ImGui::RadioButton("Release", &e, 1);
-
-    ImGui::Text("Test Cases");
-    static bool selected[12];
-    if (ImGui::BeginTable("Test Cases", 3)) {
-        int count = 0;
-        for (int row = 0; row < 4; row++)
-        {
-            ImGui::TableNextRow();
-            for (int column = 0; column < 3; column++)
-            {
-                ImGui::TableSetColumnIndex(column);
-                char name[100];
-                sprintf(name, "Test Case %d", count);
-                ImGui::Checkbox(name, &selected[count]);
-                ++count;
-            }
-        }
-        ImGui::EndTable();
-    }
+    
+    render_test_case_table();
 
     if (ImGui::Button("Select All")) {
         for (int i = 0; i < 12; ++i)
