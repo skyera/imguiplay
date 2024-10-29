@@ -1,6 +1,6 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "imgui_impl_opengl2.h"
 #include "ImGuiFileDialog.h"
 #include <stdio.h>
 #include <GLFW/glfw3.h>
@@ -58,7 +58,8 @@ static void show_main_menu_bar() {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Help")) {
-            if (ImGui::Button("About")) {
+            //if (ImGui::Button("About")) {
+            if (ImGui::MenuItem("About")) {
                 show_about = true;
             }
             ImGui::EndMenu();
@@ -118,18 +119,18 @@ int main(int, char**)
     if (!glfwInit())
         return 1;
 
-#if defined(__APPLE__)
-    // GL 3.2 + GLSL 150
-    const char* glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
-#else
-    const char* glsl_version = "#version 130";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#endif
+/* #if defined(__APPLE__) */
+/*     // GL 3.2 + GLSL 150 */
+/*     const char* glsl_version = "#version 150"; */
+/*     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); */
+/*     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2); */
+/*     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only */
+/*     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac */
+/* #else */
+/*     const char* glsl_version = "#version 130"; */
+/*     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); */
+/*     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0); */
+/* #endif */
     GLFWwindow* window = glfwCreateWindow(1024, 720,
             "Test Dear ImGui", NULL, NULL);
     if (window == NULL)
@@ -145,7 +146,7 @@ int main(int, char**)
 
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    ImGui_ImplOpenGL2_Init();
     
     setup_fonts();
     bool show_demo_window = false;
@@ -155,7 +156,7 @@ int main(int, char**)
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
@@ -372,12 +373,13 @@ int main(int, char**)
                 clear_color.y * clear_color.w,
                 clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
+        glfwMakeContextCurrent(window);
         glfwSwapBuffers(window);
     }
 
-    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplOpenGL2_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
