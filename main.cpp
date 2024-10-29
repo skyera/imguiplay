@@ -48,6 +48,24 @@ void show_error_dialog(const char* errorMessage) {
     }
 }
 
+static void show_main_menu_bar() {
+    if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("File")) {
+            if (ImGui::MenuItem("Open")) {
+            }
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Help")) {
+            if (ImGui::MenuItem("About")) {
+                ImGui::OpenPopup("About");
+                ImGui::ShowAboutWindow();
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+}
+
 int main(int, char**)
 {
     glfwSetErrorCallback(glfw_error_callback);
@@ -97,7 +115,9 @@ int main(int, char**)
 
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
-
+        
+    
+        show_main_menu_bar();
         {
             static float f = 0.0f;
             static int counter = 0;
