@@ -7,6 +7,7 @@
 #include <math.h>
 #include "cadmodel.h"
 #include <iostream>
+#include "implot.h"
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
 #pragma comment(lib, "legacy_stdio_definitions")
@@ -129,6 +130,7 @@ static void render_window1() {
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
             1000.0f / ImGui::GetIO().Framerate,
             ImGui::GetIO().Framerate);
+    ImPlot::ShowDemoWindow();
     ImGui::End();
 }
 
