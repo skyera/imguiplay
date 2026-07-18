@@ -4,6 +4,9 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{20b90ce4-7fcb-4731-b9a0-075f875de82d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="imgui\backends">
+      <UniqueIdentifier>{7a8b9c0d-1e2f-3a4b-5c6d-7e8f9a0b1c2d}</UniqueIdentifier>
+    </Filter>
     <Filter Include="sources">
       <UniqueIdentifier>{f18ab499-84e1-499f-8eff-9754361e0e52}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -38,10 +41,10 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="external\imgui\backends\imgui_impl_glfw.cpp">
-      <Filter>sources</Filter>
+      <Filter>imgui\backends</Filter>
     </ClCompile>
     <ClCompile Include="external\imgui\backends\imgui_impl_opengl2.cpp">
-      <Filter>sources</Filter>
+      <Filter>imgui\backends</Filter>
     </ClCompile>
     <ClCompile Include="external\ImGuiFileDialog\ImGuiFileDialog.cpp">
       <Filter>ImGuiFileDialog</Filter>
@@ -70,10 +73,10 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="external\imgui\backends\imgui_impl_glfw.h">
-      <Filter>sources</Filter>
+      <Filter>imgui\backends</Filter>
     </ClInclude>
     <ClInclude Include="external\imgui\backends\imgui_impl_opengl2.h">
-      <Filter>sources</Filter>
+      <Filter>imgui\backends</Filter>
     </ClInclude>
     <ClInclude Include="external\ImGuiFileDialog\ImGuiFileDialog.h">
       <Filter>ImGuiFileDialog</Filter>
