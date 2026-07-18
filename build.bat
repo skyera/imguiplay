@@ -85,7 +85,7 @@ cl /nologo %CL_FLAGS% %INCLUDES% %SOURCES% /Fe%OUT_DIR%/%OUT_EXE%.exe /Fo%OUT_DI
 goto :eof
 
 :show_help
-echo Usage: build_win32.bat [debug ^| release ^| help]
+echo Usage: build.bat [debug ^| release ^| help]
 echo.
 echo Options:
 echo   debug     - Build Debug configuration (default).
