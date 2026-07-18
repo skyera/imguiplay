@@ -1,6 +1,16 @@
 @echo off
 setlocal enabledelayedexpansion
 
+REM Check for help arguments
+if /I "%~1"=="help" goto show_help
+if /I "%~1"=="/help" goto show_help
+if /I "%~1"=="-help" goto show_help
+if /I "%~1"=="--help" goto show_help
+if /I "%~1"=="/h" goto show_help
+if /I "%~1"=="-h" goto show_help
+if /I "%~1"=="?" goto show_help
+if /I "%~1"=="/?" goto show_help
+
 REM Try to run cl. If it fails, locate and run vcvarsall.bat automatically
 where cl >nul 2>nul
 if %errorlevel% neq 0 (
@@ -72,3 +82,13 @@ if %errorlevel% neq 0 (
 @set LIBS=/LIBPATH:..\imgui\examples\libs\glfw\lib-vc2010-32 glfw3.lib opengl32.lib gdi32.lib shell32.lib
 mkdir %OUT_DIR% 2>nul
 cl /nologo %CL_FLAGS% %INCLUDES% %SOURCES% /Fe%OUT_DIR%/%OUT_EXE%.exe /Fo%OUT_DIR%/ /link %LIBS%
+goto :eof
+
+:show_help
+echo Usage: build_win32.bat [debug ^| release ^| help]
+echo.
+echo Options:
+echo   debug     - Build Debug configuration (default).
+echo   release   - Build Release configuration (optimized).
+echo   help      - Show this help message.
+exit /b 0
