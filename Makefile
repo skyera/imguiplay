@@ -34,11 +34,13 @@ TEST_TARGET = testimgui
 
 CXXFLAGS = -std=c++11 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends -I$(IMGUIFILEDIALOG_DIR) -I$(IMPLOT_DIR)
 CXXFLAGS += -Iexternal/doctest/doctest
-CXXFLAGS += -g -Wall -Wformat
+CXXFLAGS += -Wall -Wformat
 LIBS =
 
-ifeq ($DEBUG, 1)
-	CXXFLAGS += -g
+ifeq ($(DEBUG), 1)
+	CXXFLAGS += -g -O0
+else
+	CXXFLAGS += -O2
 endif
 
 ##---------------------------------------------------------------------
