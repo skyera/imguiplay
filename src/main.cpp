@@ -64,44 +64,17 @@ void show_error_dialog(const char* errorMessage) {
 }
 
 static bool show_about = false;
-static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+static ImVec4 clear_color = ImVec4(0.09f, 0.09f, 0.10f, 1.00f); // Match dashboard background
 static bool show_demo_window = false;
-static bool show_test_window = true;
-
-static void show_main_menu_bar() {
-    show_about = false;
-    if (ImGui::BeginMainMenuBar()) {
-        if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Open")) {
-            }
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Help")) {
-            if (ImGui::MenuItem("About")) {
-                show_about = true;
-            }
-            ImGui::EndMenu();
-        }
-        ImGui::EndMainMenuBar();
-    }
-}
 
 static void show_about_dialog() {
     static bool open = true;
-    if (show_about) {
-        ImGui::OpenPopup("About Myapp");
-        open = true;
-    }
-
-    if (ImGui::BeginPopupModal("About Myapp", &open,
-                ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("imguiplay");
+    if (ImGui::BeginPopupModal("About Myapp", &open, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("imguiplay - CAD Geometry Inspector & Test bed");
         ImGui::Separator();
 
-        ImGui::Text("Version: 1.0.0");
+        ImGui::Text("Version: 2.0.0");
         ImGui::Text("Author: skyera");
-
-        ImGui::Spacing();
 
         ImGui::Spacing();
         ImGui::Separator();
@@ -109,7 +82,7 @@ static void show_about_dialog() {
         ImGui::Text("This application is licensed under the MIT License.");
 
         ImGui::Spacing();
-        if (ImGui::Button("Visit GitHub")) {
+        if (ImGui::Button("Visit GitHub", ImVec2(250, 30))) {
 #ifdef _WIN32
             system("start https://github.com/skeyera/imguiplay");
 #elif __APPLE__
@@ -120,7 +93,7 @@ static void show_about_dialog() {
         }
 
         ImGui::Spacing();
-        if (ImGui::Button("Close")) {
+        if (ImGui::Button("Close", ImVec2(250, 30))) {
             ImGui::CloseCurrentPopup();
         }
 
@@ -128,108 +101,347 @@ static void show_about_dialog() {
     }
 }
 
-static void render_window1() {
-    static float f = 0.0f;
-    static int counter = 0;
+void apply_premium_theme()
+{
+    ImGuiStyle& style = ImGui::GetStyle();
+    ImVec4* colors = style.Colors;
 
-    ImGui::Begin("My Test");
+    style.WindowRounding = 6.0f;
+    style.FrameRounding = 4.0f;
+    style.GrabRounding = 4.0f;
+    style.PopupRounding = 4.0f;
+    style.ScrollbarRounding = 4.0f;
+    style.TabRounding = 4.0f;
+    style.WindowBorderSize = 1.0f;
+    style.FrameBorderSize = 0.0f;
+    style.PopupBorderSize = 1.0f;
 
-    ImGui::Text("This is some useful text.");              
-    ImGui::Checkbox("Demo Window", &show_demo_window);    
+    // Dark charcoal background
+    colors[ImGuiCol_WindowBg]             = ImVec4(0.09f, 0.09f, 0.10f, 1.00f);
+    colors[ImGuiCol_ChildBg]              = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
+    colors[ImGuiCol_PopupBg]              = ImVec4(0.12f, 0.12f, 0.14f, 0.98f);
+    colors[ImGuiCol_Border]               = ImVec4(0.20f, 0.20f, 0.22f, 1.00f);
+    colors[ImGuiCol_BorderShadow]         = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 
-    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);         
-    ImGui::ColorEdit3("clear color", (float*)&clear_color); 
+    // Frame backgrounds
+    colors[ImGuiCol_FrameBg]              = ImVec4(0.18f, 0.18f, 0.20f, 1.00f);
+    colors[ImGuiCol_FrameBgHovered]       = ImVec4(0.24f, 0.24f, 0.27f, 1.00f);
+    colors[ImGuiCol_FrameBgActive]        = ImVec4(0.20f, 0.20f, 0.22f, 1.00f);
 
-    if (ImGui::Button("Button"))                           
-        counter++;
-    ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
+    // Titles
+    colors[ImGuiCol_TitleBg]              = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
+    colors[ImGuiCol_TitleBgActive]        = ImVec4(0.15f, 0.15f, 0.17f, 1.00f);
+    colors[ImGuiCol_TitleBgCollapsed]     = ImVec4(0.09f, 0.09f, 0.10f, 1.00f);
 
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-            1000.0f / ImGui::GetIO().Framerate,
-            ImGui::GetIO().Framerate);
-    ImPlot::ShowDemoWindow();
-    ImGui::End();
+    // Menus
+    colors[ImGuiCol_MenuBarBg]            = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
+
+    // Tabs
+    colors[ImGuiCol_Tab]                  = ImVec4(0.15f, 0.15f, 0.17f, 1.00f);
+    colors[ImGuiCol_TabHovered]           = ImVec4(0.28f, 0.23f, 0.54f, 0.80f); // Sleek Indigo accent
+    colors[ImGuiCol_TabActive]            = ImVec4(0.35f, 0.29f, 0.68f, 1.00f); // Bright Indigo accent
+    colors[ImGuiCol_TabUnfocused]         = ImVec4(0.12f, 0.12f, 0.14f, 1.00f);
+    colors[ImGuiCol_TabUnfocusedActive]   = ImVec4(0.18f, 0.18f, 0.20f, 1.00f);
+
+    // Buttons
+    colors[ImGuiCol_Button]               = ImVec4(0.35f, 0.29f, 0.68f, 1.00f); // Indigo button
+    colors[ImGuiCol_ButtonHovered]        = ImVec4(0.43f, 0.36f, 0.80f, 1.00f);
+    colors[ImGuiCol_ButtonActive]         = ImVec4(0.28f, 0.23f, 0.54f, 1.00f);
+
+    // Headers (table headers, collapsing headers)
+    colors[ImGuiCol_Header]               = ImVec4(0.20f, 0.20f, 0.22f, 1.00f);
+    colors[ImGuiCol_HeaderHovered]        = ImVec4(0.28f, 0.23f, 0.54f, 0.80f);
+    colors[ImGuiCol_HeaderActive]         = ImVec4(0.35f, 0.29f, 0.68f, 1.00f);
+
+    // Active components (Checkboxes, sliders, progress bars)
+    colors[ImGuiCol_CheckMark]            = ImVec4(0.64f, 0.58f, 0.95f, 1.00f);
+    colors[ImGuiCol_SliderGrab]           = ImVec4(0.53f, 0.45f, 0.88f, 1.00f);
+    colors[ImGuiCol_SliderGrabActive]     = ImVec4(0.64f, 0.58f, 0.95f, 1.00f);
+
+    // Text & selections
+    colors[ImGuiCol_Text]                 = ImVec4(0.92f, 0.92f, 0.95f, 1.00f);
+    colors[ImGuiCol_TextDisabled]         = ImVec4(0.50f, 0.50f, 0.55f, 1.00f);
+    colors[ImGuiCol_TextSelectedBg]       = ImVec4(0.35f, 0.29f, 0.68f, 0.35f);
 }
 
+static Cadmodel g_cad_model;
+static std::string g_stl_path;
+static int g_num_facets = 0;
+static bool g_show_error = false;
+static std::string g_error_message;
+
+static int g_test_status = 0; // 0 = Not started, 1 = Running, 2 = Success
+static float g_test_timer = 0.0f;
 static bool selected[12];
-void render_test_case_table() {
-    ImGui::Text("Test Cases");
-    if (ImGui::BeginTable("Test Cases", 3)) {
-        int count = 0;
-        for (int row = 0; row < 4; row++)
-        {
-            ImGui::TableNextRow();
-            for (int column = 0; column < 3; column++)
-            {
-                ImGui::TableSetColumnIndex(column);
-                char name[100];
-                sprintf(name, "Test Case %d", count);
-                ImGui::Checkbox(name, &selected[count]);
-                ++count;
-            }
-        }
-        ImGui::EndTable();
-    }
-}
 
-static void render_test_window() {
-    ImGui::Begin("Test in Action", &show_test_window, ImGuiWindowFlags_MenuBar);                          
+static void render_widgets() {
+    // 1. Check for simulation timer completion
+    if (g_test_status == 1 && ImGui::GetTime() > g_test_timer) {
+        g_test_status = 2; // Success
+    }
+
+    // 2. Open popups if needed
+    if (show_about) {
+        ImGui::OpenPopup("About Myapp");
+        show_about = false;
+    }
+    show_about_dialog();
+
+    if (show_demo_window) {
+        ImGui::ShowDemoWindow(&show_demo_window);
+    }
+
+    // 3. Fullscreen workspace window
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar;
+    window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+    ImGui::Begin("Workspace Dashboard", nullptr, window_flags);
+    ImGui::PopStyleVar(3);
+
+    // 4. Main Menu Bar inside fullscreen window
     if (ImGui::BeginMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Open..", "Ctrl+O")) {
-
+            if (ImGui::MenuItem("Open STL File...", "Ctrl+O")) {
+                IGFD::FileDialogConfig config;
+                config.path = "./data";
+                IGFD::FileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", "((.*)),.stl", config);
             }
-            if (ImGui::MenuItem("Demo")) {
-                show_demo_window = true;
+            ImGui::Separator();
+            if (ImGui::MenuItem("Exit", "Alt+F4")) {
+                exit(0);
             }
-            if (ImGui::MenuItem("Close", "Ctrl+w")) {
-
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Help")) {
+            if (ImGui::MenuItem("About")) {
+                show_about = true;
             }
             ImGui::EndMenu();
         }
         ImGui::EndMenuBar();
     }
 
+    // 5. File Dialog Display
+    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+        if (ImGuiFileDialog::Instance()->IsOk()) {
+            g_show_error = false;
+            g_stl_path = ImGuiFileDialog::Instance()->GetFilePathName();
+            try {
+                g_cad_model = Cadmodel();
+                g_cad_model.open(g_stl_path);
+                g_num_facets = g_cad_model.facets().size();
+            } catch (const CadmodelError& e) {
+                g_show_error = true;
+                g_error_message = e.what();
+                g_num_facets = 0;
+            }
+        }
+        ImGuiFileDialog::Instance()->Close();
+    }
 
-    ImGui::Text("Build Type: ");
-    ImGui::SameLine();
-    static int e = 0;
-    ImGui::RadioButton("Debug", &e, 0);
-    ImGui::SameLine();
-    ImGui::RadioButton("Release", &e, 1);
+    // 6. Left Sidebar Panel (Width: 320px)
+    ImGui::BeginChild("Sidebar", ImVec2(320, 0), true, ImGuiWindowFlags_NoScrollbar);
     
-    render_test_case_table();
+    ImGui::TextColored(ImVec4(0.64f, 0.58f, 0.95f, 1.00f), "CONTROL CENTER");
+    ImGui::Separator();
+    ImGui::Spacing();
 
-    if (ImGui::Button("Select All")) {
-        for (int i = 0; i < 12; ++i)
-            selected[i] = true;
+    // Section A: STL Loader
+    ImGui::Text("CAD FILE LOADER");
+    if (ImGui::Button("Open STL File...", ImVec2(-1, 40))) {
+        IGFD::FileDialogConfig config;
+        config.path = "./data";
+        IGFD::FileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", "((.*)),.stl", config);
     }
+    
+    if (g_num_facets > 0) {
+        std::string filename = g_stl_path.substr(g_stl_path.find_last_of("/\\") + 1);
+        ImGui::Text("File: %s", filename.c_str());
+        ImGui::Text("Facets: %d", g_num_facets);
+    } else {
+        ImGui::Text("No STL file loaded");
+    }
+
+    if (g_show_error) {
+        ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "Error: %s", g_error_message.c_str());
+    }
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    // Section B: Test Runner Configuration
+    ImGui::Text("TEST CONFIGURATION");
+    static int build_type = 0;
+    ImGui::RadioButton("Debug Build", &build_type, 0); ImGui::SameLine();
+    ImGui::RadioButton("Release Build", &build_type, 1);
+    ImGui::Spacing();
+
+    if (ImGui::Button("Select All", ImVec2(140, 0))) {
+        for (int i = 0; i < 12; i++) selected[i] = true;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Select None", ImVec2(140, 0))) {
+        for (int i = 0; i < 12; i++) selected[i] = false;
+    }
+    
+    ImGui::Spacing();
+    if (ImGui::Button("Run Selected Tests", ImVec2(-1, 45))) {
+        g_test_status = 1; // Running
+        g_test_timer = (float)ImGui::GetTime() + 1.2f; // Simulate for 1.2s
+    }
+
+    ImGui::Spacing();
+    ImGui::Text("Test Status: ");
+    ImGui::SameLine();
+    if (g_test_status == 0) {
+        ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Idle");
+    } else if (g_test_status == 1) {
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Running...");
+    } else if (g_test_status == 2) {
+        ImGui::TextColored(ImVec4(0.1f, 1.0f, 0.1f, 1.0f), "Completed (Success)");
+    }
+    
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    // Section C: Global Settings
+    ImGui::Text("GLOBAL SETTINGS");
+    ImGui::ColorEdit3("Clear Color", (float*)&clear_color);
+    ImGui::Checkbox("Show ImGui Demo Window", &show_demo_window);
+    
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+    
+    // Performance Info at the bottom of Sidebar
+    ImGui::Text("PERFORMANCE INFO");
+    ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+    ImGui::EndChild();
 
     ImGui::SameLine();
 
-    if (ImGui::Button("Select None")) {
-        for (int i = 0; i < 12; ++i)
-            selected[i] = false;
-    }
-
-    ImGui::SameLine();
-    if (ImGui::Button("Run")) {
-        printf("Run\n");
-    }
-
-    ImGui::Text("Test Status");
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Not started");
-
+    // 7. Right Panel (Remaining space for Tabs)
+    ImGui::BeginChild("MainArea", ImVec2(0, 0), false);
+    
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-    if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
-    {
-        if (ImGui::BeginTabItem("Memory Plot"))
-        {
-            static bool animate = true;
-            ImGui::Checkbox("Animate", &animate);
+    if (ImGui::BeginTabBar("WorkspaceTabBar", tab_bar_flags)) {
+        
+        // Tab 1: STL Inspector
+        if (ImGui::BeginTabItem("STL Geometry Inspector")) {
+            if (g_num_facets == 0) {
+                ImGui::Spacing();
+                ImGui::Text("No STL model loaded. Please click 'Open STL File...' on the sidebar to load and inspect geometry data.");
+            } else {
+                ImGui::Text("STL Model: %s", g_stl_path.c_str());
+                ImGui::Separator();
+                ImGui::Spacing();
+                
+                ImGui::Text("Facet Database (showing first 200 elements):");
+                if (ImGui::BeginTable("StlTable", 5, ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY, ImVec2(0, 480))) {
+                    ImGui::TableSetupColumn("Index", ImGuiTableColumnFlags_WidthFixed, 60.0f);
+                    ImGui::TableSetupColumn("Normal Vector (X, Y, Z)");
+                    ImGui::TableSetupColumn("Vertex 1 (X, Y, Z)");
+                    ImGui::TableSetupColumn("Vertex 2 (X, Y, Z)");
+                    ImGui::TableSetupColumn("Vertex 3 (X, Y, Z)");
+                    ImGui::TableHeadersRow();
 
+                    const auto& facets = g_cad_model.facets();
+                    int display_count = facets.size() < 200 ? facets.size() : 200;
+                    for (int i = 0; i < display_count; i++) {
+                        const auto& facet = facets[i];
+                        ImGui::TableNextRow();
+                        
+                        // Index
+                        ImGui::TableSetColumnIndex(0);
+                        ImGui::Text("#%d", i + 1);
+                        
+                        // Normal
+                        ImGui::TableSetColumnIndex(1);
+                        ImGui::Text("%.4f, %.4f, %.4f", facet.normal().x(), facet.normal().y(), facet.normal().z());
+                        
+                        // Vertices
+                        if (facet.points().size() == 3) {
+                            ImGui::TableSetColumnIndex(2);
+                            ImGui::Text("%.4f, %.4f, %.4f", facet.points()[0].x(), facet.points()[0].y(), facet.points()[0].z());
+                            
+                            ImGui::TableSetColumnIndex(3);
+                            ImGui::Text("%.4f, %.4f, %.4f", facet.points()[1].x(), facet.points()[1].y(), facet.points()[1].z());
+                            
+                            ImGui::TableSetColumnIndex(4);
+                            ImGui::Text("%.4f, %.4f, %.4f", facet.points()[2].x(), facet.points()[2].y(), facet.points()[2].z());
+                        } else {
+                            ImGui::TableSetColumnIndex(2);
+                            ImGui::Text("Invalid geometry data (missing vertices)");
+                        }
+                    }
+                    ImGui::EndTable();
+                }
+            }
+            ImGui::EndTabItem();
+        }
+
+        // Tab 2: Test Case Selection
+        if (ImGui::BeginTabItem("Test Runner Dashboard")) {
+            ImGui::Text("Select the test cases you wish to run:");
+            ImGui::Spacing();
+            
+            // Checkboxes table
+            if (ImGui::BeginTable("TestCaseGrid", 3, ImGuiTableFlags_Borders)) {
+                int case_idx = 0;
+                for (int row = 0; row < 4; row++) {
+                    ImGui::TableNextRow();
+                    for (int col = 0; col < 3; col++) {
+                        ImGui::TableSetColumnIndex(col);
+                        char name[50];
+                        sprintf(name, "Test Case %d", case_idx);
+                        ImGui::Checkbox(name, &selected[case_idx]);
+                        case_idx++;
+                    }
+                }
+                ImGui::EndTable();
+            }
+            
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+            
+            ImGui::Text("Test Console / Output Log:");
+            ImGui::BeginChild("ConsoleLog", ImVec2(0, 200), true);
+            if (g_test_status == 0) {
+                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "System idle. Awaiting command to run tests...");
+            } else if (g_test_status == 1) {
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "[RUN] Initializing Doctest suite...");
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "[RUN] Running selected test cases...");
+            } else if (g_test_status == 2) {
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "[doctest] doctest version is \"2.4.11\"");
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "[doctest] run with \"--help\" for options");
+                ImGui::Text("===============================================================================");
+                int selected_count = 0;
+                for (int i = 0; i < 12; i++) if (selected[i]) selected_count++;
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "[doctest] test cases: %d | %d passed | 0 failed | 0 skipped", selected_count, selected_count);
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "[doctest] Status: SUCCESS!");
+            }
+            ImGui::EndChild();
+            
+            ImGui::EndTabItem();
+        }
+
+        // Tab 3: Performance Plots
+        if (ImGui::BeginTabItem("System Plots")) {
+            static bool animate = true;
+            ImGui::Checkbox("Animate Cosine Wave", &animate);
+            
+            ImGui::Text("Memory Allocation (Simulated)");
             static float arr[] = { 0.6f, 0.1f, 1.0f, 0.5f, 0.92f, 0.1f, 0.2f };
             ImGui::PlotLines("Frame Times", arr, IM_ARRAYSIZE(arr));
             ImGui::PlotHistogram("Histogram", arr, IM_ARRAYSIZE(arr),
@@ -257,84 +469,24 @@ static void render_test_window() {
                 average /= (float)IM_ARRAYSIZE(values);
                 char overlay[32];
                 sprintf(overlay, "avg %f", average);
-                ImGui::PlotLines("Lines", values, IM_ARRAYSIZE(values),
-                        values_offset, overlay, -1.0f, 1.0f, ImVec2(0, 80.0f));
+                ImGui::PlotLines("Cosine Waves", values, IM_ARRAYSIZE(values),
+                        values_offset, overlay, -1.0f, 1.0f, ImVec2(0, 100.0f));
             }
+            
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Test Summary"))
-        {
-            ImGui::Text("This is the Broccoli tab!");
+        
+        // Tab 4: ImPlot Demo
+        if (ImGui::BeginTabItem("ImPlot Demo Window")) {
+            ImPlot::ShowDemoWindow();
             ImGui::EndTabItem();
         }
-        if (ImGui::BeginTabItem("Test XML"))
-        {
-            ImGui::Text("This is the Cucumber tab!");
-            ImGui::EndTabItem();
-        }
-        if (ImGui::BeginTabItem("Valgrind"))
-        {
-            ImGui::Text("This is the Cucumber tab!");
-            ImGui::EndTabItem();
-        }
+
         ImGui::EndTabBar();
     }
-    ImGui::Separator();
-    ImGui::End();
-}
-
-static void render_blackcat_window() {
-    static std::string path;
-    static int num_facets = 0;
-    static std::string error;
-    static bool show_error = false;
-    ImGui::Begin("Imgui BlackCat");
-    ImGui::Text("Hello Xiaohei!");
-    if (ImGui::Button("Open")) {
-        IGFD::FileDialogConfig config;
-        config.path = "./data";
-        IGFD::FileDialog::Instance()->OpenDialog("ChooseFileDlgKey",
-                "Choose File", "((.*)),.stl", config);
-    }
-
-    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
-        if (ImGuiFileDialog::Instance()->IsOk()) {
-            show_error = false;
-            path = ImGuiFileDialog::Instance()->GetFilePathName();
-            Cadmodel model;
-
-            try {
-                model.open(path);
-                num_facets = model.facets().size();
-            } catch (const CadmodelError& e) {
-                printf("Error: %s\n", e.what());
-                //show_error_dialog(e.what());
-                show_error = true;
-                error = e.what();
-            }
-        }
-        ImGuiFileDialog::Instance()->Close();
-    }
-    ImGui::SameLine();
-    ImGui::Text("Path: %s", path.c_str());
-    ImGui::Text("# facets: %d", num_facets);
-
-    if (show_error) {
-        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", error.c_str());
-    }
+    ImGui::EndChild();
 
     ImGui::End();
-}
-
-static void render_widgets() {
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
-    show_main_menu_bar();
-    show_about_dialog();
-
-    render_window1();
-    render_test_window();
-    render_blackcat_window();
 }
 
 int main(int, char**)
@@ -370,6 +522,7 @@ int main(int, char**)
     (void)io;
 
     ImGui::StyleColorsDark();
+    apply_premium_theme();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL2_Init();
     

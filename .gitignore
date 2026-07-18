@@ -44,4 +44,5 @@ ipch/
 *.VC.db
 *.opensdf
 *.sdf
+imgui.ini
 
