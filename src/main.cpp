@@ -21,11 +21,29 @@ static void glfw_error_callback(int error, const char* description)
 void setup_fonts()
 {
     ImGuiIO& io = ImGui::GetIO();
-    
     io.Fonts->Clear();
-    io.Fonts->AddFontDefault();
-    ImFont *font = io.Fonts->Fonts.back();
-    font->Scale = 1.5f;
+    
+    const char* paths[] = {
+        "external/imgui/misc/fonts/DroidSans.ttf",
+        "../external/imgui/misc/fonts/DroidSans.ttf",
+        "../../external/imgui/misc/fonts/DroidSans.ttf"
+    };
+    
+    ImFont* font = nullptr;
+    for (int i = 0; i < 3; i++) {
+        FILE* f = fopen(paths[i], "rb");
+        if (f) {
+            fclose(f);
+            font = io.Fonts->AddFontFromFileTTF(paths[i], 22.0f);
+            break;
+        }
+    }
+    
+    if (!font) {
+        io.Fonts->AddFontDefault();
+        font = io.Fonts->Fonts.back();
+        font->Scale = 1.8f;
+    }
 }
 
 void show_error_dialog(const char* errorMessage) {
