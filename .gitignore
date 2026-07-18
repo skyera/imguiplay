@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.db
+*.pdb
+*.ilk
+Debug/
+Release/
+ipch/
+*.VC.db
+*.opensdf
+*.sdf
+
