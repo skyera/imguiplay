@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
-#include "cadmodel.h"
+#include "cad_model.h"
 #include <iostream>
 #include "implot.h"
 

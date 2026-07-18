@@ -1,6 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
-#include "cadmodel.h"
+#include "cad_model.h"
 
 TEST_CASE("ctor") {
     Cadmodel model;    

@@ -16,10 +16,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="cadmodel.cpp">
+    <ClCompile Include="src\cad_model.cpp">
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="external\imgui\imgui.cpp">
@@ -57,7 +57,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cadmodel.h">
+    <ClInclude Include="src\cad_model.h">
       <Filter>sources</Filter>
     </ClInclude>
     <ClInclude Include="external\imgui\imconfig.h">

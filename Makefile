@@ -18,21 +18,21 @@ EXE = myimgui
 IMGUI_DIR = external/imgui
 IMPLOT_DIR = external/implot
 IMGUIFILEDIALOG_DIR = external/ImGuiFileDialog
-SOURCES = main.cpp
+SOURCES = src/main.cpp
 SOURCES += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp 
 SOURCES += $(IMGUI_DIR)/backends/imgui_impl_glfw.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl2.cpp
 SOURCES += $(IMGUIFILEDIALOG_DIR)/ImGuiFileDialog.cpp
 SOURCES += $(IMPLOT_DIR)/implot.cpp $(IMPLOT_DIR)/implot_items.cpp $(IMPLOT_DIR)/implot_demo.cpp
-SOURCES += cadmodel.cpp
-OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
+SOURCES += src/cad_model.cpp
+OBJS = $(addsuffix .o, $(basename $(SOURCES)))
 UNAME_S := $(shell uname -s)
 LINUX_GL_LIBS = -lGL
 
-TEST_SOURCES = test.cpp cadmodel.cpp
-TEST_OBJECTS = $(addsuffix .o, $(basename $(notdir $(TEST_SOURCES))))
+TEST_SOURCES = tests/test.cpp src/cad_model.cpp
+TEST_OBJECTS = $(addsuffix .o, $(basename $(TEST_SOURCES)))
 TEST_TARGET = testimgui
 
-CXXFLAGS = -std=c++11 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends -I$(IMGUIFILEDIALOG_DIR) -I$(IMPLOT_DIR)
+CXXFLAGS = -std=c++11 -Isrc -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends -I$(IMGUIFILEDIALOG_DIR) -I$(IMPLOT_DIR)
 CXXFLAGS += -Iexternal/doctest/doctest
 CXXFLAGS += -Wall -Wformat
 LIBS =
@@ -86,19 +86,22 @@ endif
 ## BUILD RULES
 ##---------------------------------------------------------------------
 
-%.o:%.cpp
+src/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMGUI_DIR)/%.cpp
+tests/%.o: tests/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMGUI_DIR)/backends/%.cpp
+$(IMGUI_DIR)/%.o: $(IMGUI_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMGUIFILEDIALOG_DIR)/%.cpp
+$(IMGUI_DIR)/backends/%.o: $(IMGUI_DIR)/backends/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMPLOT_DIR)/%.cpp
+$(IMGUIFILEDIALOG_DIR)/%.o: $(IMGUIFILEDIALOG_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(IMPLOT_DIR)/%.o: $(IMPLOT_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 all: $(EXE)

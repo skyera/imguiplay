@@ -72,13 +72,13 @@ if %errorlevel% neq 0 (
     @set CL_FLAGS=/O2 /MD /EHsc /D_CRT_SECURE_NO_WARNINGS /DNDEBUG
 ) else (
     @set OUT_DIR=Debug
-    @set CL_FLAGS=/Zi /Od /MD /EHsc /D_CRT_SECURE_NO_WARNINGS /D_DEBUG
+    @set CL_FLAGS=/Zi /Od /MD /EHsc /D_CRT_SECURE_NO_WARNINGS
 )
 
 @echo Building %BUILD_TYPE% version...
 @set OUT_EXE=myimgui
-@set INCLUDES=/Iexternal\imgui /Iexternal\imgui\backends /Iexternal\ImGuiFileDialog /Iexternal\implot /I..\imgui\examples\libs\glfw\include
-@set SOURCES=main.cpp cadmodel.cpp external\imgui\imgui.cpp external\imgui\imgui_demo.cpp external\imgui\imgui_draw.cpp external\imgui\imgui_tables.cpp external\imgui\imgui_widgets.cpp external\imgui\backends\imgui_impl_glfw.cpp external\imgui\backends\imgui_impl_opengl2.cpp external\ImGuiFileDialog\ImGuiFileDialog.cpp external\implot\implot.cpp external\implot\implot_demo.cpp external\implot\implot_items.cpp
+@set INCLUDES=/Isrc /Iexternal\imgui /Iexternal\imgui\backends /Iexternal\ImGuiFileDialog /Iexternal\implot /I..\imgui\examples\libs\glfw\include
+@set SOURCES=src\main.cpp src\cad_model.cpp external\imgui\imgui.cpp external\imgui\imgui_demo.cpp external\imgui\imgui_draw.cpp external\imgui\imgui_tables.cpp external\imgui\imgui_widgets.cpp external\imgui\backends\imgui_impl_glfw.cpp external\imgui\backends\imgui_impl_opengl2.cpp external\ImGuiFileDialog\ImGuiFileDialog.cpp external\implot\implot.cpp external\implot\implot_demo.cpp external\implot\implot_items.cpp
 @set LIBS=/LIBPATH:..\imgui\examples\libs\glfw\lib-vc2010-32 glfw3.lib opengl32.lib gdi32.lib shell32.lib
 mkdir %OUT_DIR% 2>nul
 cl /nologo %CL_FLAGS% %INCLUDES% %SOURCES% /Fe%OUT_DIR%/%OUT_EXE%.exe /Fo%OUT_DIR%/ /link %LIBS%
