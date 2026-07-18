@@ -51,11 +51,6 @@ Cadmodel::~Cadmodel()
 
 void Cadmodel::open(const std::string& filename)
 {
-    std::ifstream ifs(filename.c_str());
-    if(!ifs.is_open()) {
-        throw CadmodelError("Cannot open file: " + filename);
-    }
-
     auto text = read_file(filename);
     read(text);
 }
@@ -88,7 +83,7 @@ void Cadmodel::validate_1line(const std::string& line)
 void Cadmodel::validate_lastline(const std::string& line)
 {
     auto last_line_tokens = tokenize(line);
-    if (last_line_tokens[0] != "endsolid") {
+    if (last_line_tokens.empty() || last_line_tokens[0] != "endsolid") {
         throw CadmodelError("Invalid last line");
     }
 }
@@ -160,7 +155,7 @@ void Cadmodel::read_outer_loop()
     if (tokens.size() != 2) {
         throw CadmodelError("Invalid outer loop");
     }
-    if (tokens[0] != "outer" && tokens[1] != "loop") {
+    if (tokens[0] != "outer" || tokens[1] != "loop") {
         throw CadmodelError("Invalid outer loop");
     }
 }
@@ -168,7 +163,7 @@ void Cadmodel::read_outer_loop()
 Point Cadmodel::read_vertex()
 {
     std::vector<std::string> tokens = get_line_tokens();
-    if (tokens.size() != 4) {
+    if (tokens.size() != 4 || tokens[0] != "vertex") {
         throw CadmodelError("Invalid vertex");
     }
     double x = std::stod(tokens[1]);
@@ -203,10 +198,7 @@ void Cadmodel::read_endfacet()
 void Cadmodel::read_endsolid()
 {
     auto tokens = get_line_tokens();
-    if (tokens.size() != 2) {
-        throw CadmodelError("Invalid endsolid");
-    }
-    if (tokens[0] != "endsolid") {
+    if (tokens.empty() || tokens[0] != "endsolid") {
         throw CadmodelError("Invalid endsolid");
     }
 }

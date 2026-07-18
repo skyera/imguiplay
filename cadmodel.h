@@ -14,6 +14,9 @@ class Point
 {
 public:
     Point(double x=0.0, double y=0.0, double z=0.0) : x_(x), y_(y), z_(z) {}
+    double x() const { return x_; }
+    double y() const { return y_; }
+    double z() const { return z_; }
 private:
     double x_ = 0.0;
     double y_ = 0.0;
@@ -69,7 +72,7 @@ private:
 
     
     std::vector<std::string> lines_;
-    int index_ = 0;
+    size_t index_ = 0;
     std::vector<Facet> facets_;
 };
 #endif

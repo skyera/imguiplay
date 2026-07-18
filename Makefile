@@ -109,7 +109,7 @@ test: $(TEST_TARGET)
 	./$(TEST_TARGET)
 
 $(TEST_TARGET): $(TEST_OBJECTS)
-	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 clean:
 	rm -f $(EXE) $(OBJS) $(TEST_TARGET) $(TEST_OBJECTS)
